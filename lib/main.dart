@@ -1,16 +1,38 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:text_editor/text_editor.dart';
+import './question.dart';
+import './answer.dart';
 
 void main() => runApp(MyApp());
 // function with only one expression
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _MyAppState();
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  var _questionIndex = 0;
+
+  void _answerQuestion() {
+    setState(() {
+      _questionIndex++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      'What \'s your favourite color?',
-      'What \'s your favourite animal?',
+    final questions = [
+      {
+        'questionText': 'What \'s your favourite color?',
+        'answers': ['Black', 'Red', 'Green', 'Blue'],
+      },
+      {
+        'questionText': 'What \'s your favourite animal?',
+        'answers': ['Cat', 'Dog', 'Rabbit'],
+      }
     ];
 
     return MaterialApp(
@@ -21,17 +43,14 @@ class MyApp extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Text('This is questions!',
-          style: TextStyle(fontSize: 30.0, color: Colors.blue),
+          Question(
+            questions[_questionIndex]['questionText'],
           ),
-          ElevatedButton(child: Text('Answer 1'), onPressed: null),
-          ElevatedButton(child: Text('Answer 2'), onPressed: null),
-          ElevatedButton(child: Text('Answer 3'), onPressed: null),
+          ...(questions[_questionIndex]['answers'] as List<String>).map((answer) {
+            return Answer(_answerQuestion, answer);
+          }).toList()
         ],
-
       ),
-
-    )
-    );
+    ));
   }
 }
